@@ -2,12 +2,10 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
-// Ensure the path to your routes is correct relative to this file
 const reservationRoutes = require("../src/routes/reservations");
 
 const app = express();
 
-// Configure CORS
 const allowedOrigins = [
   "https://reservation-app-lemon.vercel.app",
   "http://localhost:5173"
@@ -15,17 +13,19 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps or curl)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST", "DELETE"],
+  methods: ["GET", "POST", "DELETE", "OPTIONS"],
   credentials: true
 }));
+
+// 👇 IMPORTANT FOR PREFLIGHT
+app.options("*", cors());
 
 app.use(express.json());
 
@@ -36,18 +36,10 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-// Error handling
+// Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: "Something went wrong!" });
 });
-
-// Only listen if not in production (Vercel manages the server)
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
 
 module.exports = app;
