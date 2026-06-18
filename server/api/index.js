@@ -9,7 +9,7 @@ const app = express();
 // 1. Configure CORS to allow your specific frontend domains
 const allowedOrigins = [
   "http://localhost:5173", 
-  "https://your-frontend-domain.vercel.app" // Update this to your actual Vercel URL
+  "reservation-app-lemon.vercel.app" // Update this to your actual Vercel URL
 ];
 
 app.use(cors({
