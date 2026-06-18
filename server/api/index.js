@@ -1,14 +1,16 @@
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config(); // Ensure environment variables are loaded
+require("dotenv").config();
 
+// Ensure the path to your routes is correct relative to this file
 const reservationRoutes = require("../src/routes/reservations");
 
 const app = express();
 
-// 1. Configure CORS to allow your specific frontend domains
+// Configure CORS
 const allowedOrigins = [
-  "reservation-app-lemon.vercel.app" // Update this to your actual Vercel URL
+  "https://reservation-app-lemon.vercel.app",
+  "http://localhost:5173"
 ];
 
 app.use(cors({
@@ -17,26 +19,27 @@ app.use(cors({
   credentials: true
 }));
 
-// 2. Middleware to parse JSON bodies
 app.use(express.json());
 
-// 3. Define Routes
-// The request path will be /api/reservations/ (from this line) 
-// + the route defined in your reservations.js file
+// Routes
 app.use("/api/reservations", reservationRoutes);
 
-// 4. Basic health check route
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-// 5. Error handling middleware
+// Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: "Something went wrong!" });
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Only listen if not in production (Vercel manages the server)
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+module.exports = app;
