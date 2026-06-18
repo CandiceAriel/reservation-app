@@ -5,5 +5,5 @@ const api = axios.create({
 });
 
 export const createReservation = (data) => {
-  return api.post('/reservations', data);
+  return api.post('/api/reservations', data);
 };
