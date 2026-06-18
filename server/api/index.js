@@ -2,13 +2,12 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config(); // Ensure environment variables are loaded
 
-const reservationRoutes = require("./src/routes/reservations");
+const reservationRoutes = require("../src/routes/reservations");
 
 const app = express();
 
 // 1. Configure CORS to allow your specific frontend domains
 const allowedOrigins = [
-  "http://localhost:5173", 
   "reservation-app-lemon.vercel.app" // Update this to your actual Vercel URL
 ];
 
