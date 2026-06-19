@@ -7,3 +7,11 @@ const api = axios.create({
 export const createReservation = (data) => {
   return api.post('/api/reservations', data);
 };
+
+export const getReservations = () => {
+  return api.get('/api/reservations');
+};
+
+export const deleteReservation = (id) => {
+  return api.delete(`/api/reservations/${id}`);
+};
